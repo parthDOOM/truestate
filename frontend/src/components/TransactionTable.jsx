@@ -64,7 +64,8 @@ export default function TransactionTable({
     transactions = [],
     isLoading = false,
     sortBy = 'date_desc',
-    onSortChange
+    onSortChange,
+    onRowClick
 }) {
     const handleSort = (field) => {
         if (!onSortChange) return;
@@ -162,8 +163,9 @@ export default function TransactionTable({
                         {transactions.map((transaction, idx) => (
                             <tr
                                 key={transaction._id || transaction.transactionID}
-                                className="transition-colors hover:bg-surface-700/20 animate-fade-in"
+                                className="transition-colors hover:bg-surface-700/20 animate-fade-in cursor-pointer"
                                 style={{ animationDelay: `${idx * 20}ms` }}
+                                onClick={() => onRowClick && onRowClick(transaction)}
                             >
                                 <td className="table-cell">
                                     <span className="font-mono text-primary-400">

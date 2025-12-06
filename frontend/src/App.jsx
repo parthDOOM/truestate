@@ -1,12 +1,16 @@
-import React, { useMemo, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React, { useMemo, useCallback, useState } from 'react';
+import { Routes, Route, Link, useSearchParams, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/react-query';
-import { Download, RefreshCw } from 'lucide-react';
+import { Download, RefreshCw, Sun, Moon, BarChart2 } from 'lucide-react';
 
 import TransactionTable from './components/TransactionTable';
+import TransactionModal from './components/TransactionModal';
 import FilterPanel from './components/FilterPanel';
 import SearchBar from './components/SearchBar';
 import Pagination from './components/Pagination';
+import Analytics from './pages/Analytics';
+import { ThemeProvider, useTheme } from './contexts/ThemeContext';
+import { ToastProvider, useToast } from './contexts/ToastContext';
 import { useTransactions, useFilterOptions, useTransactionStats } from './hooks/useTransactions';
 import { transactionApi } from './services/api';
 
@@ -77,6 +81,9 @@ function StatsCard({ icon: Icon, label, value, color = 'primary' }) {
 function Dashboard() {
     const [searchParams, setSearchParams] = useSearchParams();
     const qClient = useQueryClient();
+    const { theme, toggleTheme } = useTheme();
+    const toast = useToast();
+    const [selectedTransaction, setSelectedTransaction] = useState(null);
 
     // Parse URL params
     const queryParams = useMemo(() => ({
@@ -112,7 +119,8 @@ function Dashboard() {
         qClient.invalidateQueries({ queryKey: ['transactions'] });
         qClient.invalidateQueries({ queryKey: ['transactionStats'] });
         qClient.invalidateQueries({ queryKey: ['filterOptions'] });
-    }, [qClient]);
+        toast.success('Data refreshed');
+    }, [qClient, toast]);
 
     // Update URL params
     const updateParams = useCallback((updates) => {
@@ -146,7 +154,6 @@ function Dashboard() {
     };
 
     const handleFilterChange = (newFilters) => {
-        // Create update object with all filter keys
         const filterUpdates = {
             region: newFilters.region || [],
             gender: newFilters.gender || [],
@@ -172,7 +179,16 @@ function Dashboard() {
     };
 
     const handleExport = () => {
-        transactionApi.exportCSV(queryParams);
+        try {
+            transactionApi.exportCSV(queryParams);
+            toast.success('Export started - check your downloads');
+        } catch (err) {
+            toast.error('Export failed');
+        }
+    };
+
+    const handleRowClick = (transaction) => {
+        setSelectedTransaction(transaction);
     };
 
     const formatCurrency = (amount) => {
@@ -200,7 +216,7 @@ function Dashboard() {
                                 <path d="M14 24L32 10L50 24" stroke="#0F766E" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                             <div>
-                                <h1 className="text-xl font-bold text-surface-100">TruEstate</h1>
+                                <h1 className="text-xl font-bold text-surface-100">TruEst</h1>
                                 <p className="text-xs text-surface-500">Retail Sales Management</p>
                             </div>
                         </div>
@@ -214,6 +230,20 @@ function Dashboard() {
 
                         {/* Actions */}
                         <div className="flex items-center gap-3">
+                            <Link
+                                to="/analytics"
+                                className="btn-secondary flex items-center gap-2"
+                            >
+                                <BarChart2 className="w-4 h-4" />
+                                Analytics
+                            </Link>
+                            <button
+                                onClick={toggleTheme}
+                                className="p-2 rounded-lg bg-surface-700 text-surface-300 hover:bg-surface-600 transition-colors"
+                                title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                            >
+                                {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                            </button>
                             <button
                                 onClick={handleRefresh}
                                 className="btn-secondary flex items-center gap-2"
@@ -297,7 +327,7 @@ function Dashboard() {
                                 <p className="font-medium">Failed to load transactions</p>
                                 <p className="text-sm text-surface-500 mt-1">Please check if the backend server is running</p>
                                 <button
-                                    onClick={() => refetch()}
+                                    onClick={handleRefresh}
                                     className="btn-secondary mt-4"
                                 >
                                     Try Again
@@ -310,6 +340,7 @@ function Dashboard() {
                             isLoading={isLoading}
                             sortBy={queryParams.sortBy}
                             onSortChange={handleSortChange}
+                            onRowClick={handleRowClick}
                         />
 
                         {!isLoading && transactions.length > 0 && (
@@ -324,6 +355,14 @@ function Dashboard() {
                     </div>
                 </div>
             </main>
+
+            {/* Transaction Detail Modal */}
+            {selectedTransaction && (
+                <TransactionModal
+                    transaction={selectedTransaction}
+                    onClose={() => setSelectedTransaction(null)}
+                />
+            )}
         </div>
     );
 }
@@ -331,7 +370,14 @@ function Dashboard() {
 export default function App() {
     return (
         <QueryClientProvider client={queryClient}>
-            <Dashboard />
+            <ThemeProvider>
+                <ToastProvider>
+                    <Routes>
+                        <Route path="/" element={<Dashboard />} />
+                        <Route path="/analytics" element={<Analytics />} />
+                    </Routes>
+                </ToastProvider>
+            </ThemeProvider>
         </QueryClientProvider>
     );
 }

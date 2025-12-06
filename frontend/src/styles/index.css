@@ -137,3 +137,210 @@ body {
 .font-tabular {
   font-variant-numeric: tabular-nums;
 }
+
+/* Modal animation */
+@keyframes scale-up {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-up {
+  animation: scale-up 0.2s ease-out;
+}
+
+/* Toast animation */
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+/* Light Theme */
+html.light body {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+html.light ::-webkit-scrollbar-track {
+  background: #e2e8f0;
+}
+
+html.light ::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+}
+
+html.light .glass-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(148, 163, 184, 0.4);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Header and surfaces */
+html.light .bg-surface-900\/80 {
+  background: rgba(255, 255, 255, 0.95) !important;
+}
+
+html.light .bg-surface-800 {
+  background: #ffffff !important;
+}
+
+html.light .bg-surface-800\/50 {
+  background: rgba(255, 255, 255, 0.8) !important;
+}
+
+html.light .bg-surface-800\/30 {
+  background: rgba(241, 245, 249, 0.8) !important;
+}
+
+html.light .bg-surface-700 {
+  background: #e2e8f0 !important;
+}
+
+html.light .bg-surface-700\/50 {
+  background: rgba(226, 232, 240, 0.6) !important;
+}
+
+html.light .bg-surface-700\/30 {
+  background: rgba(226, 232, 240, 0.4) !important;
+}
+
+html.light .bg-surface-700\/20 {
+  background: rgba(226, 232, 240, 0.3) !important;
+}
+
+/* Borders */
+html.light .border-surface-700\/50 {
+  border-color: rgba(203, 213, 225, 0.6) !important;
+}
+
+html.light .border-surface-700\/30 {
+  border-color: rgba(203, 213, 225, 0.4) !important;
+}
+
+html.light .border-surface-700 {
+  border-color: #cbd5e1 !important;
+}
+
+html.light .border-surface-600 {
+  border-color: #94a3b8 !important;
+}
+
+html.light .border-surface-600\/50 {
+  border-color: rgba(148, 163, 184, 0.5) !important;
+}
+
+/* Text colors */
+html.light .text-surface-100 {
+  color: #0f172a !important;
+}
+
+html.light .text-surface-200 {
+  color: #1e293b !important;
+}
+
+html.light .text-surface-300 {
+  color: #334155 !important;
+}
+
+html.light .text-surface-400 {
+  color: #475569 !important;
+}
+
+html.light .text-surface-500 {
+  color: #64748b !important;
+}
+
+html.light .text-surface-600 {
+  color: #94a3b8 !important;
+}
+
+/* Input fields */
+html.light .input-field {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #1e293b !important;
+}
+
+html.light .input-field::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Buttons */
+html.light .btn-secondary {
+  background: #e2e8f0 !important;
+  color: #1e293b !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light .btn-secondary:hover {
+  background: #cbd5e1 !important;
+}
+
+/* Table */
+html.light .table-header {
+  color: #475569 !important;
+}
+
+html.light .table-cell {
+  color: #334155 !important;
+}
+
+html.light .divide-surface-700\/30> :not([hidden])~ :not([hidden]) {
+  border-color: rgba(203, 213, 225, 0.5) !important;
+}
+
+/* Tags and pills */
+html.light .tag-pill {
+  background: rgba(99, 102, 241, 0.1) !important;
+  border-color: rgba(99, 102, 241, 0.3) !important;
+}
+
+/* Hover states */
+html.light .hover\:bg-surface-700\/20:hover {
+  background: rgba(226, 232, 240, 0.5) !important;
+}
+
+html.light .hover\:bg-surface-700\/50:hover {
+  background: rgba(226, 232, 240, 0.7) !important;
+}
+
+html.light .hover\:bg-surface-600:hover {
+  background: #cbd5e1 !important;
+}
+
+/* Accordion */
+html.light .accordion-trigger {
+  background: rgba(241, 245, 249, 0.8) !important;
+  color: #1e293b !important;
+}
+
+html.light .accordion-trigger:hover {
+  background: rgba(226, 232, 240, 0.8) !important;
+}
+
+/* Modal overlay */
+html.light .bg-black\/60 {
+  background: rgba(15, 23, 42, 0.4) !important;
+}
+
+/* Skeleton loading */
+html.light .skeleton {
+  background: rgba(203, 213, 225, 0.5) !important;
+}
