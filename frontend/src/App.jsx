@@ -88,7 +88,7 @@ function Dashboard() {
     // Parse URL params
     const queryParams = useMemo(() => ({
         page: parseInt(searchParams.get('page')) || 1,
-        limit: parseInt(searchParams.get('limit')) || 20,
+        limit: parseInt(searchParams.get('limit')) || 10,
         keyword: searchParams.get('keyword') || '',
         region: searchParams.getAll('region'),
         gender: searchParams.getAll('gender'),
@@ -101,6 +101,8 @@ function Dashboard() {
         maxAge: searchParams.get('maxAge') || undefined,
         minAmount: searchParams.get('minAmount') || undefined,
         maxAmount: searchParams.get('maxAmount') || undefined,
+        startDate: searchParams.get('startDate') || undefined,
+        endDate: searchParams.get('endDate') || undefined,
         sortBy: searchParams.get('sortBy') || 'date_desc',
     }), [searchParams]);
 
@@ -166,6 +168,8 @@ function Dashboard() {
             maxAge: newFilters.maxAge || null,
             minAmount: newFilters.minAmount || null,
             maxAmount: newFilters.maxAmount || null,
+            startDate: newFilters.startDate || null,
+            endDate: newFilters.endDate || null,
         };
         updateParams(filterUpdates);
     };
@@ -313,6 +317,8 @@ function Dashboard() {
                                     maxAge: queryParams.maxAge,
                                     minAmount: queryParams.minAmount,
                                     maxAmount: queryParams.maxAmount,
+                                    startDate: queryParams.startDate,
+                                    endDate: queryParams.endDate,
                                 }}
                                 onFilterChange={handleFilterChange}
                                 isLoading={isLoadingFilters}

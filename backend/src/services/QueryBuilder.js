@@ -123,6 +123,8 @@ class QueryBuilder {
             'finalAmount': 'finalAmount',
             'age': 'age',
             'name': 'customerName',
+            'customer': 'customerName',
+            'quantity': 'quantity',
             'id': 'transactionID',
             'category': 'productCategory'
         };
@@ -169,7 +171,7 @@ class QueryBuilder {
      */
     getPagination() {
         const page = parseInt(this.reqQuery.page, 10) || 1;
-        const limit = parseInt(this.reqQuery.limit, 10) || 20;
+        const limit = parseInt(this.reqQuery.limit, 10) || 10;
         const skip = (page - 1) * limit;
 
         return { page, limit, skip };

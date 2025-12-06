@@ -9,7 +9,8 @@ import {
     ShoppingBag,
     Truck,
     CheckCircle2,
-    X
+    X,
+    Calendar
 } from 'lucide-react';
 
 function AccordionSection({ title, icon: Icon, children, defaultOpen = false }) {
@@ -305,6 +306,29 @@ export default function FilterPanel({
                             handleFilterChange('maxAmount', maxAmount);
                         }}
                     />
+                </AccordionSection>
+
+                <AccordionSection title="Date Range" icon={Calendar}>
+                    <div className="space-y-3">
+                        <div>
+                            <label className="text-xs text-surface-400 block mb-1">Start Date</label>
+                            <input
+                                type="date"
+                                value={filters.startDate || ''}
+                                onChange={(e) => handleFilterChange('startDate', e.target.value)}
+                                className="input-field text-sm py-1.5"
+                            />
+                        </div>
+                        <div>
+                            <label className="text-xs text-surface-400 block mb-1">End Date</label>
+                            <input
+                                type="date"
+                                value={filters.endDate || ''}
+                                onChange={(e) => handleFilterChange('endDate', e.target.value)}
+                                className="input-field text-sm py-1.5"
+                            />
+                        </div>
+                    </div>
                 </AccordionSection>
             </div>
         </div>

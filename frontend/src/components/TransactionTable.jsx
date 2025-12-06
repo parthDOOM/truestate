@@ -123,10 +123,14 @@ export default function TransactionTable({
                                 </button>
                             </th>
                             <th className="table-header">
-                                <span className="flex items-center gap-1">
+                                <button
+                                    onClick={() => handleSort('customer')}
+                                    className="flex items-center gap-1 hover:text-surface-200 transition-colors"
+                                >
                                     <User className="w-3.5 h-3.5" />
                                     Customer
-                                </span>
+                                    <SortIcon field="customer" currentSort={sortBy} />
+                                </button>
                             </th>
                             <th className="table-header">
                                 <span className="flex items-center gap-1">
@@ -135,6 +139,15 @@ export default function TransactionTable({
                                 </span>
                             </th>
                             <th className="table-header">Tags</th>
+                            <th className="table-header text-center">
+                                <button
+                                    onClick={() => handleSort('quantity')}
+                                    className="flex items-center gap-1 mx-auto hover:text-surface-200 transition-colors"
+                                >
+                                    Qty
+                                    <SortIcon field="quantity" currentSort={sortBy} />
+                                </button>
+                            </th>
                             <th className="table-header text-right">
                                 <button
                                     onClick={() => handleSort('amount')}
@@ -203,6 +216,11 @@ export default function TransactionTable({
                                             </span>
                                         )}
                                     </div>
+                                </td>
+                                <td className="table-cell text-center">
+                                    <span className="font-mono text-surface-300">
+                                        {transaction.quantity}
+                                    </span>
                                 </td>
                                 <td className="table-cell text-right">
                                     <span className="font-mono font-medium text-surface-200 font-tabular">
