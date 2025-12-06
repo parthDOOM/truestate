@@ -2,7 +2,7 @@
 
 A modern retail sales management system for tracking and analyzing transactions.
 
-![TruEstate Dashboard](frontend\public\image.png)
+![TruEstate Dashboard](frontend/public/image.png)
 
 ## Features
 
