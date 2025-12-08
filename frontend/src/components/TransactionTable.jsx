@@ -2,20 +2,12 @@ import React from 'react';
 import {
     Calendar,
     User,
-    Tag,
-    CreditCard,
-    MapPin,
     ChevronUp,
     ChevronDown,
-    ArrowUpDown
+    ArrowUpDown,
+    Copy,
+    Check
 } from 'lucide-react';
-
-const statusStyles = {
-    'Completed': { bg: 'bg-emerald-500/20', text: 'text-emerald-400', dot: 'status-completed' },
-    'Pending': { bg: 'bg-amber-500/20', text: 'text-amber-400', dot: 'status-pending' },
-    'Cancelled': { bg: 'bg-red-500/20', text: 'text-red-400', dot: 'status-cancelled' },
-    'Returned': { bg: 'bg-blue-500/20', text: 'text-blue-400', dot: 'status-returned' },
-};
 
 function formatCurrency(amount) {
     return new Intl.NumberFormat('en-IN', {
@@ -41,6 +33,27 @@ function SortIcon({ field, currentSort }) {
     return currentSort.endsWith('_desc')
         ? <ChevronDown className="w-4 h-4 text-primary-400" />
         : <ChevronUp className="w-4 h-4 text-primary-400" />;
+}
+
+function CopyButton({ text }) {
+    const [copied, setCopied] = React.useState(false);
+
+    const handleCopy = (e) => {
+        e.stopPropagation();
+        navigator.clipboard.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    return (
+        <button
+            onClick={handleCopy}
+            className="p-1 rounded hover:bg-surface-700/50 text-surface-400 hover:text-surface-200 transition-colors"
+            title="Copy phone number"
+        >
+            {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+        </button>
+    );
 }
 
 function TableSkeleton() {
@@ -108,7 +121,7 @@ export default function TransactionTable({
                                     onClick={() => handleSort('id')}
                                     className="flex items-center gap-1 hover:text-surface-200 transition-colors"
                                 >
-                                    ID
+                                    Transaction ID
                                     <SortIcon field="id" currentSort={sortBy} />
                                 </button>
                             </th>
@@ -122,29 +135,27 @@ export default function TransactionTable({
                                     <SortIcon field="date" currentSort={sortBy} />
                                 </button>
                             </th>
+                            <th className="table-header">Customer ID</th>
                             <th className="table-header">
                                 <button
                                     onClick={() => handleSort('customer')}
                                     className="flex items-center gap-1 hover:text-surface-200 transition-colors"
                                 >
                                     <User className="w-3.5 h-3.5" />
-                                    Customer
+                                    Customer Name
                                     <SortIcon field="customer" currentSort={sortBy} />
                                 </button>
                             </th>
-                            <th className="table-header">
-                                <span className="flex items-center gap-1">
-                                    <Tag className="w-3.5 h-3.5" />
-                                    Category
-                                </span>
-                            </th>
-                            <th className="table-header">Tags</th>
+                            <th className="table-header">Phone Number</th>
+                            <th className="table-header">Gender</th>
+                            <th className="table-header">Age</th>
+                            <th className="table-header">Product Category</th>
                             <th className="table-header text-center">
                                 <button
                                     onClick={() => handleSort('quantity')}
                                     className="flex items-center gap-1 mx-auto hover:text-surface-200 transition-colors"
                                 >
-                                    Qty
+                                    Quantity
                                     <SortIcon field="quantity" currentSort={sortBy} />
                                 </button>
                             </th>
@@ -153,23 +164,13 @@ export default function TransactionTable({
                                     onClick={() => handleSort('amount')}
                                     className="flex items-center gap-1 ml-auto hover:text-surface-200 transition-colors"
                                 >
-                                    Amount
+                                    Total Amount
                                     <SortIcon field="amount" currentSort={sortBy} />
                                 </button>
                             </th>
-                            <th className="table-header">
-                                <span className="flex items-center gap-1">
-                                    <CreditCard className="w-3.5 h-3.5" />
-                                    Payment
-                                </span>
-                            </th>
-                            <th className="table-header">Status</th>
-                            <th className="table-header">
-                                <span className="flex items-center gap-1">
-                                    <MapPin className="w-3.5 h-3.5" />
-                                    Region
-                                </span>
-                            </th>
+                            <th className="table-header">Customer Region</th>
+                            <th className="table-header">Product ID</th>
+                            <th className="table-header">Employee Name</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-surface-700/30">
@@ -182,40 +183,34 @@ export default function TransactionTable({
                             >
                                 <td className="table-cell">
                                     <span className="font-mono text-primary-400">
-                                        #{transaction.transactionID}
+                                        {transaction.transactionID}
                                     </span>
                                 </td>
                                 <td className="table-cell text-surface-400">
                                     {formatDate(transaction.date)}
                                 </td>
+                                <td className="table-cell font-mono text-surface-400">
+                                    {transaction.customerID}
+                                </td>
+                                <td className="table-cell font-medium text-surface-200">
+                                    {transaction.customerName}
+                                </td>
                                 <td className="table-cell">
-                                    <div>
-                                        <div className="font-medium text-surface-200">
-                                            {transaction.customerName}
-                                        </div>
-                                        <div className="text-xs text-surface-500">
-                                            {transaction.phone}
-                                        </div>
+                                    <div className="flex items-center gap-1">
+                                        <span className="text-surface-400">{transaction.phone}</span>
+                                        <CopyButton text={transaction.phone} />
                                     </div>
+                                </td>
+                                <td className="table-cell text-surface-400">
+                                    {transaction.gender}
+                                </td>
+                                <td className="table-cell text-center text-surface-400">
+                                    {transaction.age}
                                 </td>
                                 <td className="table-cell">
                                     <span className="px-2 py-1 text-xs font-medium rounded-md bg-surface-700/50 text-surface-300">
                                         {transaction.productCategory}
                                     </span>
-                                </td>
-                                <td className="table-cell">
-                                    <div className="flex flex-wrap gap-1 max-w-[180px]">
-                                        {transaction.tags?.slice(0, 3).map((tag, i) => (
-                                            <span key={i} className="tag-pill">
-                                                {tag}
-                                            </span>
-                                        ))}
-                                        {transaction.tags?.length > 3 && (
-                                            <span className="text-xs text-surface-500">
-                                                +{transaction.tags.length - 3}
-                                            </span>
-                                        )}
-                                    </div>
                                 </td>
                                 <td className="table-cell text-center">
                                     <span className="font-mono text-surface-300">
@@ -223,23 +218,18 @@ export default function TransactionTable({
                                     </span>
                                 </td>
                                 <td className="table-cell text-right">
-                                    <span className="font-mono font-medium text-surface-200 font-tabular">
-                                        {formatCurrency(transaction.finalAmount || transaction.amount)}
+                                    <span className="font-mono font-medium text-surface-200">
+                                        {formatCurrency(transaction.amount)}
                                     </span>
                                 </td>
                                 <td className="table-cell text-surface-400">
-                                    {transaction.paymentMethod}
+                                    {transaction.region}
                                 </td>
-                                <td className="table-cell">
-                                    <div className="flex items-center gap-2">
-                                        <span className={`status-dot ${statusStyles[transaction.status]?.dot || ''}`}></span>
-                                        <span className={`text-xs font-medium ${statusStyles[transaction.status]?.text || 'text-surface-400'}`}>
-                                            {transaction.status}
-                                        </span>
-                                    </div>
+                                <td className="table-cell font-mono text-surface-400">
+                                    {transaction.productID}
                                 </td>
                                 <td className="table-cell text-surface-400">
-                                    {transaction.region}
+                                    {transaction.employeeName}
                                 </td>
                             </tr>
                         ))}

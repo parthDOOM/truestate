@@ -116,6 +116,16 @@ body {
   }
 }
 
+/* Date input calendar icon styling for dark mode */
+.dark input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
 /* Animations */
 @keyframes shimmer {
   0% {

@@ -234,7 +234,7 @@ export const getTransactionStats = async (req, res) => {
 
         const [
             totalTransactions,
-            totalRevenue,
+            revenueStats,
             statusBreakdown,
             categoryBreakdown,
             regionBreakdown
@@ -242,7 +242,14 @@ export const getTransactionStats = async (req, res) => {
             Transaction.countDocuments(query),
             Transaction.aggregate([
                 { $match: query },
-                { $group: { _id: null, total: { $sum: '$finalAmount' } } }
+                {
+                    $group: {
+                        _id: null,
+                        totalRevenue: { $sum: '$finalAmount' },
+                        totalQuantity: { $sum: '$quantity' },
+                        totalDiscount: { $sum: { $subtract: ['$amount', '$finalAmount'] } }
+                    }
+                }
             ]),
             Transaction.aggregate([
                 { $match: query },
@@ -266,7 +273,9 @@ export const getTransactionStats = async (req, res) => {
             success: true,
             data: {
                 totalTransactions,
-                totalRevenue: totalRevenue[0]?.total || 0,
+                totalRevenue: revenueStats[0]?.totalRevenue || 0,
+                totalQuantity: revenueStats[0]?.totalQuantity || 0,
+                totalDiscount: revenueStats[0]?.totalDiscount || 0,
                 statusBreakdown: statusBreakdown.map(s => ({ status: s._id, count: s.count })),
                 categoryBreakdown: categoryBreakdown.map(c => ({
                     category: c._id,
