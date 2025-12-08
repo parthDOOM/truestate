@@ -43,12 +43,12 @@ export default function Pagination({
 
             {/* Navigation */}
             <div className="flex items-center gap-1">
-                {/* First page */}
+                {/* Jump back 5 pages */}
                 <button
-                    onClick={() => onPageChange(1)}
-                    disabled={page === 1}
+                    onClick={() => onPageChange(Math.max(1, page - 5))}
+                    disabled={page <= 1}
                     className="p-2 rounded-lg transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-surface-700/50"
-                    title="First page"
+                    title="Back 5 pages"
                 >
                     <ChevronsLeft className="w-4 h-4 text-surface-300" />
                 </button>
@@ -95,12 +95,12 @@ export default function Pagination({
                     <ChevronRight className="w-4 h-4 text-surface-300" />
                 </button>
 
-                {/* Last page */}
+                {/* Jump forward 5 pages */}
                 <button
-                    onClick={() => onPageChange(totalPages)}
-                    disabled={page === totalPages}
+                    onClick={() => onPageChange(Math.min(totalPages, page + 5))}
+                    disabled={page >= totalPages}
                     className="p-2 rounded-lg transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-surface-700/50"
-                    title="Last page"
+                    title="Forward 5 pages"
                 >
                     <ChevronsRight className="w-4 h-4 text-surface-300" />
                 </button>
