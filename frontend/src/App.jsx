@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback, useState } from 'react';
 import { Routes, Route, Link, useSearchParams, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/react-query';
-import { Download, RefreshCw, Sun, Moon, BarChart2 } from 'lucide-react';
+import { Download, RefreshCw, Sun, Moon, BarChart2, Filter, X as CloseIcon } from 'lucide-react';
 
 import TransactionTable from './components/TransactionTable';
 import TransactionModal from './components/TransactionModal';
@@ -84,6 +84,7 @@ function Dashboard() {
     const { theme, toggleTheme } = useTheme();
     const toast = useToast();
     const [selectedTransaction, setSelectedTransaction] = useState(null);
+    const [showMobileFilters, setShowMobileFilters] = useState(false);
 
     // Parse URL params
     const queryParams = useMemo(() => ({
@@ -208,59 +209,70 @@ function Dashboard() {
         <div className="min-h-screen">
             {/* Header */}
             <header className="sticky top-0 z-50 backdrop-blur-lg bg-surface-900/80 border-b border-surface-700/50">
-                <div className="max-w-[1920px] mx-auto px-6 py-4">
-                    <div className="flex items-center justify-between gap-6">
+                <div className="max-w-[1920px] mx-auto px-4 sm:px-6 py-3 sm:py-4">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-6">
                         {/* Logo */}
-                        <div className="flex items-center gap-3">
-                            <svg width="40" height="40" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="0" y="0" width="64" height="64" rx="16" fill="#F0FDFA" />
-                                <rect x="14" y="28" width="10" height="20" rx="3" fill="#0F766E" />
-                                <rect x="27" y="18" width="10" height="30" rx="3" fill="#115E59" />
-                                <rect x="40" y="24" width="10" height="24" rx="3" fill="#14B8A6" />
-                                <path d="M14 24L32 10L50 24" stroke="#0F766E" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                            <div>
-                                <h1 className="text-xl font-bold text-surface-100">TruEst</h1>
-                                <p className="text-xs text-surface-500">Retail Sales Management</p>
+                        <div className="flex items-center gap-3 w-full sm:w-auto justify-between">
+                            <div className="flex items-center gap-3">
+                                <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="sm:w-10 sm:h-10">
+                                    <rect x="0" y="0" width="64" height="64" rx="16" fill="#F0FDFA" />
+                                    <rect x="14" y="28" width="10" height="20" rx="3" fill="#0F766E" />
+                                    <rect x="27" y="18" width="10" height="30" rx="3" fill="#115E59" />
+                                    <rect x="40" y="24" width="10" height="24" rx="3" fill="#14B8A6" />
+                                    <path d="M14 24L32 10L50 24" stroke="#0F766E" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                                <div>
+                                    <h1 className="text-lg sm:text-xl font-bold text-surface-100">TruEstate</h1>
+                                    <p className="text-xs text-surface-500 hidden sm:block">Retail Sales Management</p>
+                                </div>
                             </div>
+                            {/* Mobile theme toggle */}
+                            <button
+                                onClick={toggleTheme}
+                                className="sm:hidden p-2 rounded-lg bg-surface-700 text-surface-300"
+                            >
+                                {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                            </button>
                         </div>
 
-                        {/* Search */}
-                        <SearchBar
-                            value={queryParams.keyword}
-                            onChange={handleSearch}
-                            placeholder="Search customers, phone, products..."
-                        />
+                        {/* Search - Full width on mobile */}
+                        <div className="w-full sm:flex-1 sm:max-w-md">
+                            <SearchBar
+                                value={queryParams.keyword}
+                                onChange={handleSearch}
+                                placeholder="Search customers, phone, products..."
+                            />
+                        </div>
 
-                        {/* Actions */}
-                        <div className="flex items-center gap-3">
+                        {/* Actions - Scrollable on mobile */}
+                        <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
                             <Link
                                 to="/analytics"
-                                className="btn-secondary flex items-center gap-2"
+                                className="btn-secondary flex items-center gap-2 text-sm whitespace-nowrap"
                             >
                                 <BarChart2 className="w-4 h-4" />
-                                Analytics
+                                <span className="hidden sm:inline">Analytics</span>
                             </Link>
                             <button
                                 onClick={toggleTheme}
-                                className="p-2 rounded-lg bg-surface-700 text-surface-300 hover:bg-surface-600 transition-colors"
+                                className="hidden sm:flex p-2 rounded-lg bg-surface-700 text-surface-300 hover:bg-surface-600 transition-colors"
                                 title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
                             >
                                 {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
                             </button>
                             <button
                                 onClick={handleRefresh}
-                                className="btn-secondary flex items-center gap-2"
+                                className="btn-secondary flex items-center gap-2 text-sm whitespace-nowrap"
                             >
                                 <RefreshCw className="w-4 h-4" />
-                                Refresh
+                                <span className="hidden sm:inline">Refresh</span>
                             </button>
                             <button
                                 onClick={handleExport}
-                                className="btn-primary flex items-center gap-2"
+                                className="btn-primary flex items-center gap-2 text-sm whitespace-nowrap"
                             >
                                 <Download className="w-4 h-4" />
-                                Export CSV
+                                <span className="hidden sm:inline">Export</span>
                             </button>
                         </div>
                     </div>
@@ -268,8 +280,8 @@ function Dashboard() {
             </header>
 
             {/* Stats Bar */}
-            <div className="max-w-[1920px] mx-auto px-6 py-4">
-                <div className="grid grid-cols-4 gap-4">
+            <div className="max-w-[1920px] mx-auto px-4 sm:px-6 py-4">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                     <StatsCard
                         icon={IconTransactions}
                         label="Total Transactions"
@@ -298,10 +310,19 @@ function Dashboard() {
             </div>
 
             {/* Main Content */}
-            <main className="max-w-[1920px] mx-auto px-6 pb-6">
+            <main className="max-w-[1920px] mx-auto px-4 sm:px-6 pb-6">
+                {/* Mobile Filter Button */}
+                <button
+                    onClick={() => setShowMobileFilters(true)}
+                    className="lg:hidden mb-4 btn-secondary flex items-center gap-2 w-full justify-center"
+                >
+                    <Filter className="w-4 h-4" />
+                    Filters
+                </button>
+
                 <div className="flex gap-6">
-                    {/* Sidebar - Filters */}
-                    <aside className="w-72 flex-shrink-0">
+                    {/* Sidebar - Filters (Desktop) */}
+                    <aside className="hidden lg:block w-72 flex-shrink-0">
                         <div className="sticky top-24">
                             <FilterPanel
                                 filterOptions={filterOptions}
@@ -327,7 +348,7 @@ function Dashboard() {
                     </aside>
 
                     {/* Data Grid */}
-                    <div className="flex-1 space-y-4">
+                    <div className="flex-1 space-y-4 min-w-0">
                         {isError && (
                             <div className="glass-card p-6 text-center text-red-400">
                                 <p className="font-medium">Failed to load transactions</p>
@@ -341,13 +362,15 @@ function Dashboard() {
                             </div>
                         )}
 
-                        <TransactionTable
-                            transactions={transactions}
-                            isLoading={isLoading}
-                            sortBy={queryParams.sortBy}
-                            onSortChange={handleSortChange}
-                            onRowClick={handleRowClick}
-                        />
+                        <div className="overflow-x-auto">
+                            <TransactionTable
+                                transactions={transactions}
+                                isLoading={isLoading}
+                                sortBy={queryParams.sortBy}
+                                onSortChange={handleSortChange}
+                                onRowClick={handleRowClick}
+                            />
+                        </div>
 
                         {!isLoading && transactions.length > 0 && (
                             <Pagination
@@ -361,6 +384,47 @@ function Dashboard() {
                     </div>
                 </div>
             </main>
+
+            {/* Mobile Filter Drawer */}
+            {showMobileFilters && (
+                <div className="fixed inset-0 z-50 lg:hidden">
+                    <div className="absolute inset-0 bg-black/60" onClick={() => setShowMobileFilters(false)} />
+                    <div className="absolute right-0 top-0 h-full w-80 max-w-full bg-surface-900 overflow-y-auto">
+                        <div className="flex items-center justify-between p-4 border-b border-surface-700">
+                            <h2 className="text-lg font-semibold text-surface-100">Filters</h2>
+                            <button
+                                onClick={() => setShowMobileFilters(false)}
+                                className="p-2 rounded-lg hover:bg-surface-700 text-surface-400"
+                            >
+                                <CloseIcon className="w-5 h-5" />
+                            </button>
+                        </div>
+                        <FilterPanel
+                            filterOptions={filterOptions}
+                            filters={{
+                                region: queryParams.region,
+                                gender: queryParams.gender,
+                                status: queryParams.status,
+                                paymentMethod: queryParams.paymentMethod,
+                                productCategory: queryParams.productCategory,
+                                tags: queryParams.tags,
+                                deliveryType: queryParams.deliveryType,
+                                minAge: queryParams.minAge,
+                                maxAge: queryParams.maxAge,
+                                minAmount: queryParams.minAmount,
+                                maxAmount: queryParams.maxAmount,
+                                startDate: queryParams.startDate,
+                                endDate: queryParams.endDate,
+                            }}
+                            onFilterChange={(filters) => {
+                                handleFilterChange(filters);
+                                setShowMobileFilters(false);
+                            }}
+                            isLoading={isLoadingFilters}
+                        />
+                    </div>
+                </div>
+            )}
 
             {/* Transaction Detail Modal */}
             {selectedTransaction && (

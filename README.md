@@ -85,3 +85,4 @@ PORT=5000
 
 - MongoDB Atlas Free Tier: 512MB limit (~830K of 1M records)
 - CSV Export: Max 50K records per export
+- Render Free Tier: Initial load may take 30-50 seconds as the backend spins up after inactivity

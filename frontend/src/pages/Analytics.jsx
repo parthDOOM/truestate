@@ -52,24 +52,25 @@ export default function Analytics() {
         <div className="min-h-screen">
             {/* Header */}
             <header className="sticky top-0 z-50 backdrop-blur-lg bg-surface-900/80 border-b border-surface-700/50">
-                <div className="max-w-[1920px] mx-auto px-6 py-4">
+                <div className="max-w-[1920px] mx-auto px-4 sm:px-6 py-4">
                     <div className="flex items-center gap-4">
                         <Link
                             to="/"
                             className="flex items-center gap-2 text-surface-400 hover:text-surface-100 transition-colors"
                         >
                             <ArrowLeft className="w-5 h-5" />
-                            Back to Transactions
+                            <span className="hidden sm:inline">Back to Transactions</span>
+                            <span className="sm:hidden">Back</span>
                         </Link>
-                        <div className="h-6 w-px bg-surface-700" />
-                        <h1 className="text-xl font-bold text-surface-100">Analytics Dashboard</h1>
+                        <div className="h-6 w-px bg-surface-700 hidden sm:block" />
+                        <h1 className="text-lg sm:text-xl font-bold text-surface-100">Analytics</h1>
                     </div>
                 </div>
             </header>
 
             {/* Stats Summary */}
-            <div className="max-w-[1920px] mx-auto px-6 py-6">
-                <div className="grid grid-cols-3 gap-6 mb-8">
+            <div className="max-w-[1920px] mx-auto px-4 sm:px-6 py-6">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
                     <StatCard
                         icon={TrendingUp}
                         label="Total Transactions"
@@ -91,7 +92,7 @@ export default function Analytics() {
                 </div>
 
                 {/* Charts Grid */}
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                     {/* Order Status Pie Chart */}
                     <div className="glass-card p-6">
                         <h3 className="text-lg font-semibold text-surface-100 mb-4">Orders by Status</h3>
@@ -163,7 +164,7 @@ export default function Analytics() {
                     </div>
 
                     {/* Top Categories Bar Chart */}
-                    <div className="glass-card p-6 col-span-2">
+                    <div className="glass-card p-4 sm:p-6 lg:col-span-2">
                         <h3 className="text-lg font-semibold text-surface-100 mb-4">Top Categories by Revenue</h3>
                         <ResponsiveContainer width="100%" height={350}>
                             <BarChart data={categoryData} layout="vertical">
